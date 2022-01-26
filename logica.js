@@ -32,9 +32,11 @@ function doPetAJAX() {
     objXHR.open("POST", "http://localhost/test/hora.php", false);
 
     //Establecemos parámetros que irán en la cabecera
+    //En las peticiones POST tenemos que enviar en la cabecera el COntent-Type
+    //ya que los datos se envían formando parte de la cabecera
     objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded", );   
 
-    // Aqui enviamos la peticion asincrona con accion como parametro
+    // Aqui enviamos la peticion síncrona
     objXHR.send(null);
 
 }
