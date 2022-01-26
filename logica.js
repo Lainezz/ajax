@@ -1,89 +1,71 @@
-/*
-* Función que inicializa la página.
-*/
-async function inicializarPagina() {
-    //Añadimos un evento click al botón para gestionar el pedido cuando se hace click
-    const btnRealizarPedido = document.querySelector("#btnRealizarPedido");
-    btnRealizarPedido.addEventListener("click", handleClick);
+function inicializarPagina() {
 
-    //Añadimos eventos "drag" al input, que es la zona donde el usuario arrastrará su pedido
-    const inputPedido = document.querySelector("#inputPedido");
-    //dragover para evitar el comportamiento por defecto
-    inputPedido.addEventListener("dragover", handleDragOver);
-    inputPedido.addEventListener("drop", handleDrop);
 
-    //Necesitamos añadir un evento dragstart a cada uno de los elementos que se pueden arrastrar
-    const productos = document.querySelectorAll(".caja");
-    for (const prod of productos) {
-        prod.addEventListener("dragstart", handleDrag);
+    const btnHora = document.querySelector("#btnObtenerHora");
+    btnHora.addEventListener("click", doPetAJAX);
+}
+
+function doPetAJAX() {
+    const objXHR = obtainXMLHttpRequest();
+
+     // Definimos el comportamiendo del evento onreadystatechange
+    objXHR.onreadystatechange= () => 
+    {
+		// Si el estado es uno, la capa cambia a CARGANDO
+		if (objXHR.readyState===1) {
+                console.log("cargando");
+		     	document.getElementById('capa').innerHTML="CARGANDO...";
+		}
+		// Si el estado es 4 y se ha hecho la conexion correcta, se muestra en la capa la respuesta recibida
+		if (objXHR.readyState===4) 
+		{
+		    if (objXHR.status===200)
+		     {
+                console.log("realizado");
+		     	document.getElementById('capa').innerHTML=objXHR.responseText;
+		     }
+		}
     }
 
+    //En la funcionalidad Open establecemos el método de envío, la url, y
+    //false = síncrona, true = asíncrona
+    objXHR.open("POST", "http://localhost/test/hora.php", false);
+
+    //Establecemos parámetros que irán en la cabecera
+    objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded", );   
+
+    // Aqui enviamos la peticion asincrona con accion como parametro
+    objXHR.send(null);
+
 }
 
 /*
-Promise.
-Una constante que tiene asociada una función a la que le pasamos el pedido que vamos a gestionar.
-Este pedido puede ser una petición GET/POST que se usará para el acceso a la base de datos
-En nuestro pequeño ejercicio, es simplemente un texto que tiene el pedido que se desea.
+Función que usamos para obtener el objeto XMLHttpRequest independientemente del navegador en el que estemos
 */
-const gestPedido = (pedido) => new Promise((resolve, reject) => {
-
-    setTimeout(
-        () => typeof(pedido) === "number" ? reject(new Error("Pedido Incorrecto")) : resolve(pedido),
-        2000
-    );
-});
-
-/*
-Función que obtiene los datos que se han almacenado en drag y que llama a la función handlePRomise para gestionar dicho pedido
-*/
-function handleDrop(event){
-    event.preventDefault();
-    var data = event.dataTransfer.getData("text");
-    handlePromise(data);
+function obtainXMLHttpRequest() {
+    let httpRequest;
+    if (window.XMLHttpRequest) {
+        //El explorador implementa la interfaz de forma nativa
+        httpRequest = new XMLHttpRequest();
+    }
+    else if (window.ActiveXObject) {
+        //El explorador permite crear objetos ActiveX
+        try {
+            httpRequest = new ActiveXObject("MSXML2.XMLHTTP");
+        } catch (e) {
+            try {
+                httpRequest = new
+                    ActiveXObject("Microsoft.XMLHTTP");
+            } catch (e) { }
+        }
+    }
+    // Si no se puede crear, devolvemos false. En caso contrario, devolvemos el objeto
+    if (!httpRequest) {
+        return false;
+    }
+    else {
+        return httpRequest;
+    }
 }
-
-/*
-Esta función setea los datos
-*/
-function handleDrag(event){    
-    event.dataTransfer.setData("text", event.target.innerHTML);
-}
-
-/*
-El evento dragover especifica dónde se soltará el elemento que deseemos.
-Por defecto, los datos u otros elementos no pueden ser arrastrados a otros elementos. Para hacer que eso sea posible, tenemos que "deshabilitar" este comportamiento por defecto.
-Esto lo conseguimos llamando a la función .preventDefault
-*/
-function handleDragOver(event){
-    event.preventDefault();
-}
-
-/*
-Función que manejará el click sobre el botón que acompaña al input
-*/
-function handleClick(event){
-    const inputPedido = document.querySelector("#inputPedido");
-
-    handlePromise(inputPedido.value);
-}
-
-/*
-Función añadida para simplemente gestionar nuestra promise
-*/
-function handlePromise(data){
-    gestPedido(data)
-        .then((pedido) => {
-            let zonaTexto = document.querySelector("#zonaPedidos");
-            let p = document.createElement("p");
-            p.classList.add("lead");
-
-            let texto = document.createTextNode(pedido);
-            p.appendChild(texto);
-            zonaTexto.appendChild(p);
-        })
-        .catch((error) => window.alert(console.error()));
-}
-
 
 window.onload = inicializarPagina();
