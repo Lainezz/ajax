@@ -1,11 +1,14 @@
 function inicializarPagina() {
-
-
     const btnHora = document.querySelector("#btnObtenerHora");
-    btnHora.addEventListener("click", doPetAJAX);
+    btnHora.addEventListener("click", handleClick);
 }
 
-function doPetAJAX() {
+function handleClick(){
+    const url = "http://localhost/test/hora.php?nombre=Diego&apellido=Linares";
+    doPetAJAX(url);
+}
+
+function doPetAJAX(url) {
     const objXHR = obtainXMLHttpRequest();
 
      // Definimos el comportamiendo del evento onreadystatechange
@@ -14,7 +17,7 @@ function doPetAJAX() {
 		// Si el estado es uno, la capa cambia a CARGANDO
 		if (objXHR.readyState===1) {
                 console.log("cargando");
-		     	document.getElementById('capa').innerHTML="CARGANDO...";
+		     	document.getElementById('capa').innerHTML="<img src='./media/hourglass.gif'/>";
 		}
 		// Si el estado es 4 y se ha hecho la conexion correcta, se muestra en la capa la respuesta recibida
 		if (objXHR.readyState===4) 
@@ -29,12 +32,12 @@ function doPetAJAX() {
 
     //En la funcionalidad Open establecemos el método de envío, la url, y
     //false = síncrona, true = asíncrona
-    objXHR.open("POST", "http://localhost/test/hora.php", false);
+    objXHR.open("GET", url, false);
 
     //Establecemos parámetros que irán en la cabecera
-    //En las peticiones POST tenemos que enviar en la cabecera el COntent-Type
+    //En las peticiones POST tenemos que enviar los datos en la cabecera el COntent-Type
     //ya que los datos se envían formando parte de la cabecera
-    objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded", );   
+    //objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded", );   
 
     // Aqui enviamos la peticion síncrona
     objXHR.send(null);
