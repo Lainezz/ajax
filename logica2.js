@@ -1,12 +1,16 @@
 function inicializarPagina2(){
     const btnAumentarVotos = document.querySelector("#btnAumentarVotos");
     btnAumentarVotos.addEventListener("click", handleClick);
+
+    const btnMostrarVotos = document.querySelector("#btnMostrarVotos");
+    btnMostrarVotos.addEventListener("click", handleClick);
 }
 
 function handleClick(e){
 
     const url = "http://localhost/test/votos.php";
     let accion;
+    console.log(e);
 
     if(e.target.id === "btnAumentarVotos"){
         accion = "accion=votar";
@@ -16,6 +20,7 @@ function handleClick(e){
         accion = "accion=error";
     }
 
+    console.log(accion);
 
     doPetAJAX2(url, accion);
 }

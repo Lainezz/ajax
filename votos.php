@@ -22,7 +22,8 @@ function aumentarVotos(){
 	fclose($fichero);
 	return $votos;
 }
-
+//Detenemos la ejecucion del programa por 2 segundos
+sleep(2);
 // Obtenemos la accion por el metodo post.
 $accion=$_POST["accion"];
 // Leemos el fichero de votos y los mostremos
