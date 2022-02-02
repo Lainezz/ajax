@@ -17,12 +17,12 @@ function doPetAJAX() {
     objXHR.onreadystatechange= () => 
     {
 		// Si el estado es uno, la capa cambia a CARGANDO
-		if (objXHR.readyState===1) {
+		if (objXHR.readyState===readyStateOpen) {
                 console.log("cargando");
 		     	document.getElementById('capa').innerHTML="<img src='./media/hourglass.gif'/>";
 		}
 		// Si el estado es 4 y se ha hecho la conexion correcta, se muestra en la capa la respuesta recibida
-		if (objXHR.readyState===4) 
+		if (objXHR.readyState===readyStateComplete) 
 		{
 		    if (objXHR.status===200)
 		     {
@@ -40,7 +40,7 @@ function doPetAJAX() {
     //Establecemos parámetros que irán en la cabecera
     //En las peticiones POST tenemos que enviar en la cabecera el COntent-Type
     //ya que los datos se envían formando parte de la cabecera
-    //objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded", );   
+    objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded", );   
 
     // Aqui enviamos la peticion síncrona
     objXHR.send(null);

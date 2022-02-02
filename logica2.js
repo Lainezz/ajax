@@ -8,9 +8,9 @@ function handleClick(e){
     const url = "http://localhost/test/votos.php";
     let accion;
 
-    if(e.target.id = "btnAumentarVotos"){
+    if(e.target.id === "btnAumentarVotos"){
         accion = "accion=votar";
-    } else if(e.target.id = "btnMostrarVotos"){
+    } else if(e.target.id === "btnMostrarVotos"){
         accion = "accion=nVotos";
     } else {
         accion = "accion=error";
