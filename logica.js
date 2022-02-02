@@ -1,60 +1,44 @@
 function inicializarPagina() {
     const btnHora = document.querySelector("#btnObtenerHora");
-    btnHora.addEventListener("click", handleClick);
+    btnHora.addEventListener("click", doPetAJAX);
 }
 
-function handleClick(){
-    const url = "http://localhost/test/hora.php?nombre=Diego&apellido=Linares";
-    doPetAJAX(url);
-}
+const readyStateComplete = 4;
+const readyStateLoading = 3;
+const readyStateLoaded = 2;
+const readyStateOpen = 1;
 
-function doPetAJAX(url) {
+
+function doPetAJAX() {
+    //Inicializar el objeto XMLHttpRequest
     const objXHR = obtainXMLHttpRequest();
 
-<<<<<<< HEAD
     // Definimos el comportamiendo del evento onreadystatechange
     objXHR.onreadystatechange = () => {
         // Si el estado es uno, la capa cambia a CARGANDO
-        if (objXHR.readyState === 1) {
+        if (objXHR.readyState === readyStateOpen) {
             console.log("cargando");
-            document.getElementById('capa').innerHTML = "CARGANDO...";
+            document.getElementById('capa').innerHTML = "<img src='./media/loading.gif' alt='cargando'>";
         }
         // Si el estado es 4 y se ha hecho la conexion correcta, se muestra en la capa la respuesta recibida
-        if (objXHR.readyState === 4) {
+        if (objXHR.readyState === readyStateComplete) {
             if (objXHR.status === 200) {
-=======
-     // Definimos el comportamiendo del evento onreadystatechange
-    objXHR.onreadystatechange= () => 
-    {
-		// Si el estado es uno, la capa cambia a CARGANDO
-		if (objXHR.readyState===1) {
-                console.log("cargando");
-		     	document.getElementById('capa').innerHTML="<img src='./media/hourglass.gif'/>";
-		}
-		// Si el estado es 4 y se ha hecho la conexion correcta, se muestra en la capa la respuesta recibida
-		if (objXHR.readyState===4) 
-		{
-		    if (objXHR.status===200)
-		     {
->>>>>>> 6a7812f57da4261b28aa2eb6f57f18c3eb9d3d68
                 console.log("realizado");
-                document.getElementById('capa').innerHTML = objXHR.responseText;
+                document.getElementById('capa').innerHTML = 
+                    objXHR.responseText;
             }
         }
     }
 
     //En la funcionalidad Open establecemos el método de envío, la url, y
     //false = síncrona, true = asíncrona
-    objXHR.open("GET", url, false);
+    objXHR.open("GET", "http://localhost/test/hora.php", true);
 
     //Establecemos parámetros que irán en la cabecera
-    //En las peticiones POST tenemos que enviar los datos en la cabecera el COntent-Type
+    //En las peticiones POST tenemos que enviar en la cabecera el COntent-Type
     //ya que los datos se envían formando parte de la cabecera
-<<<<<<< HEAD
-    objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded",);
-=======
-    //objXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded", );   
->>>>>>> 6a7812f57da4261b28aa2eb6f57f18c3eb9d3d68
+    objXHR.setRequestHeader("Content-Type", 
+        "application/x-www-form-urlencoded");
 
     // Aqui enviamos la peticion síncrona
     objXHR.send(null);
